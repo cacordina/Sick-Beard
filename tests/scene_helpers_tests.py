@@ -72,10 +72,23 @@ class SceneTests(unittest.TestCase):
 
     def test_filterBadReleases(self):
         
-        self._test_filterBadReleases('Show.S02.German.Stuff-Grp', False)
-        self._test_filterBadReleases('Show.S02.Some.German.Stuff-Grp', False)
-        self._test_filterBadReleases('German.Show.S02.Some.Stuff-Grp', True)
-        self._test_filterBadReleases('Show.S02.This.Is.German', False)
+        self._test_filterBadReleases('Show.S02.German.Stuff-Grp','en', False)
+        self._test_filterBadReleases('Show.S02.French.Stuff-Grp','en', False)
+        self._test_filterBadReleases('Show.S02.Some.German.Stuff-Grp','en', False)
+        self._test_filterBadReleases('German.Show.S02.Some.Stuff-Grp','en', True)
+        self._test_filterBadReleases('French.Show.S02.Some.Stuff-Grp','en', True)
+        self._test_filterBadReleases('Show.S02.This.Is.German','en', False)
+
+        self._test_filterBadReleases('Show.S02.German.Stuff-Grp','de', True)
+        self._test_filterBadReleases('French.Show.S02.Some.Stuff-Grp','de', False)
+        self._test_filterBadReleases('German.Show.S02.Some.Stuff-Grp','de', False)
+        self._test_filterBadReleases('Show.S02.This.Is.German','de', True)
+        self._test_filterBadReleases('Show.S02.This.Is.French','de', False)
+
+        self._test_filterBadReleases('Show.S02.French.Stuff-Grp','fr', True)
+        self._test_filterBadReleases('Show.S02.Some.German.Stuff-Grp','fr', False)
+        self._test_filterBadReleases('Show.S02.Some.French.Stuff-Grp','fr', True)
+        self._test_filterBadReleases('Show.S02.This.Is.French','fr', True)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

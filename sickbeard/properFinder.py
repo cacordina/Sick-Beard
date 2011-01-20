@@ -140,18 +140,19 @@ class ProperFinder():
             if curProper.tvdbid == -1:
                 continue
             
-            if not sceneHelpers.filterBadReleases(curProper.name):
+ 	    showObj = helpers.findCertainShow(sickbeard.showList, curProper.tvdbid)
+ 	    if not showObj:
+ 		logger.log(u"This should never have happened, post a bug about this!", logger.ERROR)
+ 		raise Exception("BAD STUFF HAPPENED")
+ 
+            if not sceneHelpers.filterBadReleases(curProper.name, showObj.lang):
                 logger.log(u"Proper "+curProper.name+" isn't a valid scene release that we want, igoring it", logger.DEBUG)
                 continue
 
             # if we have an air-by-date show then get the real season/episode numbers
             if curProper.season == -1 and curProper.tvdbid:
-		showObj = helpers.findCertainShow(sickbeard.showList, curProper.tvdbid)
-		if not showObj:
-		    logger.log(u"This should never have happened, post a bug about this!", logger.ERROR)
-		    raise Exception("BAD STUFF HAPPENED")
-
 		tvdb_lang = showObj.lang
+
 		# There's gotta be a better way of doing this but we don't wanna
 		# change the language value elsewhere
 		ltvdb_api_parms = sickbeard.TVDB_API_PARMS.copy()

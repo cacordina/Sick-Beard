@@ -25,11 +25,22 @@ import datetime
 
 from name_parser.parser import NameParser, InvalidNameException
 
+# Words that are filtered out by filterBadReleases (blacklist)
 resultFilters = ("sub(pack|s|bed)", "nlsub(bed)?", "swesub(bed)?",
                  "(dir|sample|nfo)fix", "sample", "(dvd)?extras", 
-                 "dubbed", "german", "french", "core2hd")
+                 "dubbed", "german", "french", "core2hd", "dutch", "vostfr")
+# Exceptions by language to this filter (blacklist exceptions)
+filterExceptions = { 'de': ("german", "dubbed"),
+		     'fr': ("french", "dubbed"),
+		     'nl': ("dutch",)
+                   }
+# Words that have to be in result for it to be accepted (explicit whitelist) by language
+# One matching word suffices for accepting the release
+requiredFilters = { 'de': ("german",),
+		    'fr': ("french", "vostfr")
+		  }
 
-def filterBadReleases(name):
+def filterBadReleases(name, lang="en"):
 
     try:
         fp = NameParser()
@@ -38,15 +49,30 @@ def filterBadReleases(name):
         logger.log(u"Unable to parse the filename "+name+" into a valid episode", logger.WARNING)
         return False
 
-    # if there's no info after the season info then assume it's fine
-    if not parse_result.extra_info:
+    # exclude language exceptions from filters
+    lResultFilters = [f for f in resultFilters]
+    if lang in filterExceptions and filterExceptions[lang]:
+	for exception in filterExceptions[lang]:
+	    if exception in lResultFilters:
+		lResultFilters.remove(exception)
+
+    # if there's no info after the season info then assume it's fine, unless there is a whitelist for this language
+    if not parse_result.extra_info and not lang in requiredFilters:
         return True
 
     # if any of the bad strings are in the name then say no
-    for x in resultFilters:
+    for x in lResultFilters:
         if re.search('(^|[\W_])'+x+'($|[\W_])', parse_result.extra_info, re.I):
             logger.log(u"Invalid scene release: "+name+" contains "+x+", ignoring it", logger.DEBUG)
             return False
+
+    # if whitelist exists for language, allow only releases containing a whitelisted word
+    if lang in requiredFilters and requiredFilters[lang]:
+	for x in requiredFilters[lang]:
+	    if re.search('(^|[\W_])'+x+'($|[\W_])', parse_result.extra_info, re.I):
+	    	return True
+	logger.log(u"Invalid scene release: "+name+" doesn't contain any of the words "+str(requiredFilters[lang])+", ignoring it", logger.DEBUG)
+	return False
 
     return True
 
