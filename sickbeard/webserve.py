@@ -1197,6 +1197,7 @@ class NewHomeAddShows:
         t = PageTemplate(file="home_addShow.tmpl")
         #t.submenu = HomeMenu()
 
+
         # make sure everything's unescaped
         showDirs = [os.path.normpath(urllib.unquote_plus(x)) for x in showDirs]
 
@@ -1888,7 +1889,7 @@ class WebInterface:
         redirect("/comingEpisodes")
 
     @cherrypy.expose
-    def comingEpisodes(self):
+    def comingEpisodes(self, layout="None"):
 
         myDB = db.DBConnection()
         
@@ -1938,6 +1939,13 @@ class WebInterface:
         t.next_week = next_week
         t.today = today
         t.sql_results = sql_results
+
+	# Allow local overriding of layout parameter
+	if layout and layout in ('poster', 'banner', 'list'):
+	    t.layout = layout
+	else:
+	    t.layout = sickbeard.COMING_EPS_LAYOUT
+		
 
         return _munge(t)
 
