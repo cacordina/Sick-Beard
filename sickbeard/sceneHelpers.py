@@ -16,15 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Sick Beard.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-import os
-import os.path
-
-# allow libraries to import each other
-sys.path.append(os.path.join(os.path.dirname(sys.argv[0]), 'lib'))
-
-import sickbeard
-
 from sickbeard import common
 from sickbeard import logger
 from sickbeard import db
