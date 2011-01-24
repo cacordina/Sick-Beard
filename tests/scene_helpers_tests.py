@@ -26,8 +26,8 @@ class SceneTests(unittest.TestCase):
         result = sceneHelpers.allPossibleShowNames(Show(name, tvdbid, tvrname))
         self.assertTrue(len(set(expected).intersection(set(result))) == len(expected))
 
-    def _test_filterBadReleases(self, name, expected):
-        result = sceneHelpers.filterBadReleases(name)
+    def _test_filterBadReleases(self, name, lang, expected):
+        result = sceneHelpers.filterBadReleases(name, lang)
         self.assertEqual(result, expected)
 
     def _test_isGoodName(self, name, show):
