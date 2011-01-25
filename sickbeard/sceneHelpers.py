@@ -26,7 +26,7 @@ import datetime
 from name_parser.parser import NameParser, InvalidNameException
 
 # Words that are filtered out by filterBadReleases (blacklist)
-resultFilters = ("sub(pack|s|bed)", "nlsub(bed)?", "swesub(bed)?",
+resultFilters = ("sub(pack|s|bed)", "nlsub(bed|s)?", "swesub(bed)?",
                  "(dir|sample|nfo)fix", "sample", "(dvd)?extras", 
                  "dubbed", "german", "french", "core2hd", "dutch", "vostfr")
 # Exceptions by language to this filter (blacklist exceptions)
