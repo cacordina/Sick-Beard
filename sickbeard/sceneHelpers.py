@@ -36,10 +36,11 @@ filterExceptions = { 'de': ("german", "dubbed"),
                    }
 # Words that have to be in result for it to be accepted (explicit whitelist) by language
 # One matching word suffices for accepting the release
-requiredFilters = { 'de': ("german",),
-		    'fr': ("french", "vostfr"),
-		    'sv': ("swedish",),
-		    'da': ("danish",)
+requiredFilters = { 'de': ("german", "deutsch"),
+		    'fr': ("french", "vostfr", "francais"),
+		    'sv': ("swedish", "svenska"),
+		    'da': ("danish", "dansk"),
+		    'nl': ("dutch", "flemish", "nederlands", "vlaams")
 		  }
 
 def filterBadReleases(name, lang="en"):
